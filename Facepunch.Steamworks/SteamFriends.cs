@@ -50,7 +50,7 @@ namespace Steamworks
 		/// <summary>
 		/// Called when a chat message has been received in a Steam group chat that we are in. Associated Functions: JoinClanChatRoom. (SteamIDClanChat, friend, msgtype, message)
 		/// </summary>
-		public static event Action<SteamId, Friend, string, string> OnClanChatMessage;
+		public static event Action<SteamId, Friend, int, string, string> OnClanChatMessage;
 
 		/// <summary>
 		/// Called when a user has joined a Steam group chat that the we are in. (SteamIDClanChat, friend)
@@ -142,7 +142,29 @@ namespace Steamworks
 			var typeName = type.ToString();
 			var message = Helpers.MemoryToString( buffer );
 
-			OnClanChatMessage( data.SteamIDClanChat, friend, typeName, message );
+			OnClanChatMessage( data.SteamIDClanChat, friend, data.MessageID, typeName, message );
+		}
+
+		public static bool GetClanChatMessage(SteamId chatId, int messageId, out Friend chatter, out string msgType, out string message)
+        {
+			chatter = default;
+			message = string.Empty;
+			msgType = ChatEntryType.ChatMsg.ToString();
+
+			var buffer = Helpers.TakeMemory();
+			var type = ChatEntryType.ChatMsg;
+			SteamId chatterSteamId = default;
+
+			var len = Internal.GetClanChatMessage(chatId, messageId, buffer, Helpers.MemoryBufferSize, ref type, ref chatterSteamId);
+
+			if (len == 0 && type == ChatEntryType.Invalid)
+				return false;
+
+			chatter = new Friend(chatterSteamId);
+			msgType = type.ToString();
+			message = Helpers.MemoryToString(buffer);
+
+			return true;
 		}
 
 		private static IEnumerable<Friend> GetFriendsWithFlag(FriendFlags flag)
@@ -181,6 +203,14 @@ namespace Steamworks
 		public static IEnumerable<Friend> GetFriendsRequestingFriendship()
 		{
 			return GetFriendsWithFlag( FriendFlags.RequestingFriendship );
+		}
+
+		public static IEnumerable<Friend> GetClanChatMembers(SteamId chatId)
+		{
+			for (int i = 0; i < Internal.GetClanChatMemberCount(chatId); i++)
+			{
+				yield return new Friend(SteamFriends.Internal.GetChatMemberByIndex(chatId, i));
+			}
 		}
 
 		public static IEnumerable<Friend> GetPlayedWith()

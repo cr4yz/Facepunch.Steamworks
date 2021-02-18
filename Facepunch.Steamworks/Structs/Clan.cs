@@ -53,19 +53,6 @@ namespace Steamworks
             }
         }
 
-        public Friend GetChatMember(int index)
-        {
-            return new Friend(SteamFriends.Internal.GetChatMemberByIndex(Id, index));
-        }
-
-        public IEnumerable<Friend> GetChatMembers()
-        {
-            for(int i = 0; i < ChatMemberCount; i++)
-            {
-                yield return GetChatMember(i);
-            }
-        }
-
         private ClanActivity GetActivity()
         {
             var result = new ClanActivity();
