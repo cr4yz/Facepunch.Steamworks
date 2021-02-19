@@ -85,6 +85,7 @@ namespace Steamworks
             Dispatch.Install<HTML_NeedsPaint_t>(x => OnNeedsPaint?.Invoke(new Browser(x.UnBrowserHandle), new BrowserPaint(x)));
             Dispatch.Install<HTML_NewWindow_t>(x => OnNewWindow?.Invoke(new Browser(x.UnBrowserHandle), new BrowserNewWindow(x)));
             Dispatch.Install<HTML_OpenLinkInNewTab_t>(x => OnNewTab?.Invoke(new Browser(x.UnBrowserHandle), x.PchURL));
+            Dispatch.Install<HTML_StatusText_t>(x => OnStatusText?.Invoke(new Browser(x.UnBrowserHandle), x.PchMsg));
         }
 
         internal override void DestroyInterface(bool server)
@@ -93,6 +94,11 @@ namespace Steamworks
 
             base.DestroyInterface(server);
         }
+
+        /// <summary>
+        /// Called when a browser wants you to display an informational message. This is most commonly used when you hover over links.
+        /// </summary>
+        public static event Action<Browser, string> OnStatusText;
 
         /// <summary>
         /// The browser has requested to load a url in a new tab.
