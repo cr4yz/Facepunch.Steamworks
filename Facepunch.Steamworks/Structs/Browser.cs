@@ -15,7 +15,7 @@ namespace Steamworks.Structs
             Handle = handle;
         }
 
-        public static async Task<Browser> Create(string userAgent, string userCss)
+        public static async Task<Browser> Create(string userAgent = null, string userCss = null)
         {
             var result = await SteamHTMLSurface.Internal.CreateBrowser(userAgent, userCss);
             return new Browser(result.Value.UnBrowserHandle);
@@ -36,12 +36,12 @@ namespace Steamworks.Structs
             SteamHTMLSurface.Internal.AllowStartRequest(Handle, allowed);
         }
 
-        public void SetSize(uint width, uint height)
+        public void SetSize(int width, int height)
         {
-            SteamHTMLSurface.Internal.SetSize(Handle, width, height);
+            SteamHTMLSurface.Internal.SetSize(Handle, (uint)width, (uint)height);
         }
 
-        public void LoadURL(string url, string postData)
+        public void LoadURL(string url, string postData = null)
         {
             SteamHTMLSurface.Internal.LoadURL(Handle, url, postData);
         }
@@ -49,6 +49,42 @@ namespace Steamworks.Structs
         public void Remove()
         {
             SteamHTMLSurface.Internal.RemoveBrowser(Handle);
+        }
+
+        public void MouseMove(int x, int y)
+        {
+            SteamHTMLSurface.Internal.MouseMove(Handle, x, y);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="button">0 = left, 1 = right, 2 = middle</param>
+        public void MouseDown(int button)
+        {
+            unsafe
+            {
+                int* ptrToValue = &button;
+                SteamHTMLSurface.Internal.MouseDown(Handle, (IntPtr)ptrToValue);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="button">0 = left, 1 = right, 2 = middle</param>
+        public void MouseUp(int button)
+        {
+            unsafe
+            {
+                int* ptrToValue = &button;
+                SteamHTMLSurface.Internal.MouseUp(Handle, (IntPtr)ptrToValue);
+            }
+        }
+
+        public void MouseWheel(int delta)
+        {
+            SteamHTMLSurface.Internal.MouseWheel(Handle, delta);
         }
 
     }

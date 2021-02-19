@@ -8,10 +8,33 @@ using System.Threading.Tasks;
 
 namespace Steamworks
 {
-    public struct BrowserPaintData
+
+    public struct BrowserNewWindow
     {
-        public Browser Browser;
-        public IntPtr ImageData; // B8G8R8A8 
+        public string Url;
+        public int PosX;
+        public int PosY;
+        public int Width;
+        public int Height;
+        public Browser NewBrowser;
+
+        internal BrowserNewWindow(HTML_NewWindow_t t)
+        {
+            Url = t.PchURL;
+            PosX = (int)t.UnX;
+            PosY = (int)t.UnY;
+            Width = (int)t.UnWide;
+            Height = (int)t.UnTall;
+            NewBrowser = new Browser(t.UnNewWindow_BrowserHandle_IGNORE);
+        }
+    }
+
+    public struct BrowserPaint
+    {
+        /// <summary>
+        ///  B8G8R8A8 
+        /// </summary>
+        public IntPtr ImageData;
         public int Width;
         public int Height;
         public int DirtyX;
@@ -23,9 +46,8 @@ namespace Steamworks
         public float PageScale;
         public int PageSerial;
 
-        internal BrowserPaintData(HTML_NeedsPaint_t t)
+        internal BrowserPaint(HTML_NeedsPaint_t t)
         {
-            Browser = new Browser(t.UnBrowserHandle);
             ImageData = t.PBGRA;
             Width = (int)t.UnWide;
             Height = (int)t.UnTall;
@@ -60,7 +82,9 @@ namespace Steamworks
             Dispatch.Install<HTML_JSConfirm_t>(x => OnJSConfirm?.Invoke(new Browser(x.UnBrowserHandle), x.PchMessage));
             Dispatch.Install<HTML_FileOpenDialog_t>(x => OnFileOpenDialog?.Invoke(new Browser(x.UnBrowserHandle), x.PchTitle, x.PchInitialFile));
             Dispatch.Install<HTML_FinishedRequest_t>(x => OnFinishedLoading?.Invoke(new Browser(x.UnBrowserHandle), x.PchURL, x.PchPageTitle));
-            Dispatch.Install<HTML_NeedsPaint_t>(x => OnNeedsPaint?.Invoke(new BrowserPaintData(x)));
+            Dispatch.Install<HTML_NeedsPaint_t>(x => OnNeedsPaint?.Invoke(new Browser(x.UnBrowserHandle), new BrowserPaint(x)));
+            Dispatch.Install<HTML_NewWindow_t>(x => OnNewWindow?.Invoke(new Browser(x.UnBrowserHandle), new BrowserNewWindow(x)));
+            Dispatch.Install<HTML_OpenLinkInNewTab_t>(x => OnNewTab?.Invoke(new Browser(x.UnBrowserHandle), x.PchURL));
         }
 
         internal override void DestroyInterface(bool server)
@@ -71,6 +95,16 @@ namespace Steamworks
         }
 
         /// <summary>
+        /// The browser has requested to load a url in a new tab.
+        /// </summary>
+        public static event Action<Browser, string> OnNewTab;
+
+        /// <summary>
+        /// A browser has created a new HTML window.
+        /// </summary>
+        public static event Action<Browser, BrowserNewWindow> OnNewWindow;
+
+        /// <summary>
         /// A new browser was created and is ready for use.
         /// </summary>
         public static event Action<Browser> OnBrowserReady;
@@ -78,7 +112,7 @@ namespace Steamworks
         /// <summary>
         /// Called when a browser surface has a pending paint. This is where you get the actual image data to render to the screen.
         /// </summary>
-        public static event Action<BrowserPaintData> OnNeedsPaint;
+        public static event Action<Browser, BrowserPaint> OnNeedsPaint;
 
         /// <summary>
         /// Called when a browser has finished loading a page.
