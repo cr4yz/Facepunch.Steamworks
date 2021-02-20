@@ -56,7 +56,7 @@ namespace Steamworks.Structs
             SteamHTMLSurface.Internal.MouseMove(Handle, x, y);
         }
 
-        public void KeyDown(int nativeKeyCode, bool alt = false, bool ctrl = false, bool shift = false, bool isSystemKey = false)
+        public void KeyDown(int nativeKeyCode, bool alt, bool ctrl, bool shift, bool isSystemKey = false)
         {
             int keyModifiers = 0;
             if (alt) keyModifiers |= 1 << 0;
