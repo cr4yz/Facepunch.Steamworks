@@ -56,17 +56,45 @@ namespace Steamworks.Structs
             SteamHTMLSurface.Internal.MouseMove(Handle, x, y);
         }
 
+        public void KeyDown(int nativeKeyCode, bool alt = false, bool ctrl = false, bool shift = false, bool isSystemKey = false)
+        {
+            int keyModifiers = 0;
+            if (alt) keyModifiers |= 1 << 0;
+            if (ctrl) keyModifiers |= 1 << 1;
+            if (shift) keyModifiers |= 1 << 2;
+            SteamHTMLSurface.Internal.KeyDown(Handle, (uint)nativeKeyCode, keyModifiers, isSystemKey);
+        }
+
+        public void KeyChar(char unicode, bool alt, bool ctrl, bool shift)
+        {
+            int keyModifiers = 0;
+            if (alt) keyModifiers |= 1 << 0;
+            if (ctrl) keyModifiers |= 1 << 1;
+            if (shift) keyModifiers |= 1 << 2;
+            SteamHTMLSurface.Internal.KeyChar(Handle, unicode, keyModifiers);
+        }
+
+        public void KeyUp(int nativeKeyCode, bool alt, bool ctrl, bool shift)
+        {
+            int keyModifiers = 0;
+            if (alt) keyModifiers |= 1 << 0;
+            if (ctrl) keyModifiers |= 1 << 1;
+            if (shift) keyModifiers |= 1 << 2;
+            SteamHTMLSurface.Internal.KeyUp(Handle, (uint)nativeKeyCode, keyModifiers);
+        }
+
+        public void SetKeyFocus(bool hasFocus)
+        {
+            SteamHTMLSurface.Internal.SetKeyFocus(Handle, hasFocus);
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="button">0 = left, 1 = right, 2 = middle</param>
         public void MouseDown(int button)
         {
-            unsafe
-            {
-                int* ptrToValue = &button;
-                SteamHTMLSurface.Internal.MouseDown(Handle, (IntPtr)ptrToValue);
-            }
+            SteamHTMLSurface.Internal.MouseDown(Handle, button);
         }
 
         /// <summary>
@@ -75,11 +103,7 @@ namespace Steamworks.Structs
         /// <param name="button">0 = left, 1 = right, 2 = middle</param>
         public void MouseUp(int button)
         {
-            unsafe
-            {
-                int* ptrToValue = &button;
-                SteamHTMLSurface.Internal.MouseUp(Handle, (IntPtr)ptrToValue);
-            }
+            SteamHTMLSurface.Internal.MouseUp(Handle, button);
         }
 
         public void MouseWheel(int delta)

@@ -147,30 +147,30 @@ namespace Steamworks
 		
 		#region FunctionMeta
 		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamHTMLSurface_MouseUp", CallingConvention = Platform.CC)]
-		private static extern void _MouseUp( IntPtr self, HHTMLBrowser unBrowserHandle, IntPtr eMouseButton );
+		private static extern void _MouseUp( IntPtr self, HHTMLBrowser unBrowserHandle, int eMouseButton );
 		
 		#endregion
-		internal void MouseUp( HHTMLBrowser unBrowserHandle, IntPtr eMouseButton )
+		internal void MouseUp( HHTMLBrowser unBrowserHandle, int eMouseButton )
 		{
 			_MouseUp( Self, unBrowserHandle, eMouseButton );
 		}
 		
 		#region FunctionMeta
 		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamHTMLSurface_MouseDown", CallingConvention = Platform.CC)]
-		private static extern void _MouseDown( IntPtr self, HHTMLBrowser unBrowserHandle, IntPtr eMouseButton );
+		private static extern void _MouseDown( IntPtr self, HHTMLBrowser unBrowserHandle, int eMouseButton );
 		
 		#endregion
-		internal void MouseDown( HHTMLBrowser unBrowserHandle, IntPtr eMouseButton )
+		internal void MouseDown( HHTMLBrowser unBrowserHandle, int eMouseButton )
 		{
 			_MouseDown( Self, unBrowserHandle, eMouseButton );
 		}
 		
 		#region FunctionMeta
 		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamHTMLSurface_MouseDoubleClick", CallingConvention = Platform.CC)]
-		private static extern void _MouseDoubleClick( IntPtr self, HHTMLBrowser unBrowserHandle, IntPtr eMouseButton );
+		private static extern void _MouseDoubleClick( IntPtr self, HHTMLBrowser unBrowserHandle, int eMouseButton );
 		
 		#endregion
-		internal void MouseDoubleClick( HHTMLBrowser unBrowserHandle, IntPtr eMouseButton )
+		internal void MouseDoubleClick( HHTMLBrowser unBrowserHandle, int eMouseButton )
 		{
 			_MouseDoubleClick( Self, unBrowserHandle, eMouseButton );
 		}
@@ -197,30 +197,30 @@ namespace Steamworks
 		
 		#region FunctionMeta
 		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamHTMLSurface_KeyDown", CallingConvention = Platform.CC)]
-		private static extern void _KeyDown( IntPtr self, HHTMLBrowser unBrowserHandle, uint nNativeKeyCode, IntPtr eHTMLKeyModifiers, [MarshalAs( UnmanagedType.U1 )] bool bIsSystemKey );
+		private static extern void _KeyDown( IntPtr self, HHTMLBrowser unBrowserHandle, uint nNativeKeyCode, int eHTMLKeyModifiers, [MarshalAs( UnmanagedType.U1 )] bool bIsSystemKey );
 		
 		#endregion
-		internal void KeyDown( HHTMLBrowser unBrowserHandle, uint nNativeKeyCode, IntPtr eHTMLKeyModifiers, [MarshalAs( UnmanagedType.U1 )] bool bIsSystemKey )
+		internal void KeyDown( HHTMLBrowser unBrowserHandle, uint nNativeKeyCode, int keyModifiers, [MarshalAs( UnmanagedType.U1 )] bool bIsSystemKey )
 		{
-			_KeyDown( Self, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers, bIsSystemKey );
+			_KeyDown( Self, unBrowserHandle, nNativeKeyCode, keyModifiers, bIsSystemKey );
 		}
 		
 		#region FunctionMeta
 		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamHTMLSurface_KeyUp", CallingConvention = Platform.CC)]
-		private static extern void _KeyUp( IntPtr self, HHTMLBrowser unBrowserHandle, uint nNativeKeyCode, IntPtr eHTMLKeyModifiers );
+		private static extern void _KeyUp( IntPtr self, HHTMLBrowser unBrowserHandle, uint nNativeKeyCode, int eHTMLKeyModifiers );
 		
 		#endregion
-		internal void KeyUp( HHTMLBrowser unBrowserHandle, uint nNativeKeyCode, IntPtr eHTMLKeyModifiers )
+		internal void KeyUp( HHTMLBrowser unBrowserHandle, uint nNativeKeyCode, int eHTMLKeyModifiers )
 		{
 			_KeyUp( Self, unBrowserHandle, nNativeKeyCode, eHTMLKeyModifiers );
 		}
 		
 		#region FunctionMeta
 		[DllImport( Platform.LibraryName, EntryPoint = "SteamAPI_ISteamHTMLSurface_KeyChar", CallingConvention = Platform.CC)]
-		private static extern void _KeyChar( IntPtr self, HHTMLBrowser unBrowserHandle, uint cUnicodeChar, IntPtr eHTMLKeyModifiers );
+		private static extern void _KeyChar( IntPtr self, HHTMLBrowser unBrowserHandle, uint cUnicodeChar, int eHTMLKeyModifiers );
 		
 		#endregion
-		internal void KeyChar( HHTMLBrowser unBrowserHandle, uint cUnicodeChar, IntPtr eHTMLKeyModifiers )
+		internal void KeyChar( HHTMLBrowser unBrowserHandle, uint cUnicodeChar, int eHTMLKeyModifiers )
 		{
 			_KeyChar( Self, unBrowserHandle, cUnicodeChar, eHTMLKeyModifiers );
 		}
