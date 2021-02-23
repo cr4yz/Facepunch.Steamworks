@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Steamworks.Data;
@@ -47,6 +48,45 @@ namespace Steamworks
 				return buffer;
 			}
 		}
+
+		public static async Task<Data.Ugc?> FileShare(string filename)
+        {
+			var r = await Internal.FileShare(filename);
+			if(!r.HasValue || r.Value.Result != Result.OK)
+            {
+				return null;
+            }
+			var result = new Data.Ugc();
+			result.Handle.Value = r.Value.File;
+			return result;
+        }
+
+		public static async Task<byte[]> UGCDownload(PublishedFileId fileId, uint priority = 1)
+        {
+			var ugc = new Data.Ugc();
+			ugc.Handle.Value = fileId;
+			var r = await Internal.UGCDownload(ugc.Handle, priority);
+
+            if (!r.HasValue)
+            {
+				return null;
+            }
+
+			var size = r.Value.SizeInBytes;
+			if (size <= 0) return null;
+			var buffer = new byte[size];
+
+            unsafe
+            {
+				fixed (byte* ptr = buffer)
+				{
+					var uh2 = new Data.Ugc();
+					uh2.Handle.Value = r.Value.File;
+					var readsize = Internal.UGCRead(uh2.Handle, (IntPtr)ptr, size, 0, UGCReadAction.ontinueReadingUntilFinished);
+					return buffer;
+				}
+			}
+        }
 
 		/// <summary>
 		/// Checks whether the specified file exists.

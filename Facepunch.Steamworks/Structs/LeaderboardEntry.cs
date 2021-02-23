@@ -8,6 +8,7 @@ namespace Steamworks.Data
 		public int GlobalRank;
 		public int Score;
 		public int[] Details;
+		public Data.Ugc Ugc;
 		// UGCHandle_t m_hUGC
 
 		internal static LeaderboardEntry From( LeaderboardEntry_t e, int[] detailsBuffer )
@@ -19,6 +20,9 @@ namespace Steamworks.Data
 				Score = e.Score,
 				Details = null
 			};
+
+			r.Ugc = new Ugc();
+			r.Ugc.Handle.Value = e.UGC;
 
 			if ( e.CDetails > 0 )
 			{
