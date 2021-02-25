@@ -6,6 +6,7 @@ namespace Steamworks.Data
 	{
 		public int Score;
 		public bool Changed;
+		public bool Success;
 		public int NewGlobalRank;
 		public int OldGlobalRank;
 		public int RankChange => NewGlobalRank - OldGlobalRank;
@@ -16,7 +17,8 @@ namespace Steamworks.Data
 				Score = e.Score,
 				Changed = e.ScoreChanged == 1,
 				NewGlobalRank = e.GlobalRankNew,
-				OldGlobalRank = e.GlobalRankPrevious
+				OldGlobalRank = e.GlobalRankPrevious,
+				Success = e.Success == 1
 			};
 	}
 }
